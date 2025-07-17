@@ -17,7 +17,7 @@ export function errorHandler(error: unknown, request: TsRestRequest) {
     // If error is `ApiError`, we assume the message is safe (not sensitive) to show to the user.
     const body =
       error instanceof ApiError
-        ? { message: error.message ?? getReasonPhrase(status) }
+        ? { message: error.message || getReasonPhrase(status) }
         : { message: "A server error ocurred." };
 
     return TsRestResponse.fromJson(body, { status });
