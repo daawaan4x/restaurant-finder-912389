@@ -18,10 +18,11 @@ export type StripEmptyFields<T> = {
  */
 export function stripEmptyFields<T extends object>(obj: T) {
   return Object.fromEntries(
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     Object.entries(obj).filter(([_, value]) => {
       if (typeof value === "string" && value.length == 0) return false;
       if (value === null || value === undefined) return false;
       return true;
-    })
+    }),
   ) as StripEmptyFields<T>;
 }
