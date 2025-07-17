@@ -2,6 +2,7 @@ import axios, { AxiosError, AxiosInstance } from "axios";
 import z from "zod";
 import { ApiError } from "./error/api-error";
 import { AxiosErrorWrapper } from "./error/axios-error-wrapper";
+import { StatusCodes } from "http-status-codes";
 
 /**
  * Base Schema for query params for {@link Foursquare.findPlaces}
@@ -89,9 +90,12 @@ export class Foursquare {
       })
       .catch((error) => {
         if (error instanceof AxiosError) {
-          // if downstream response is 400, return 400
-          // default to 500 for any other errors
-          const status = error.status == 400 ? 400 : 500;
+          // if downstream response is BAD_REQUEST, return BAD_REQUEST
+          // default to INTERNAL_SERVER_ERROR for any other errors
+          const status =
+            error.status == StatusCodes.BAD_REQUEST
+              ? StatusCodes.BAD_REQUEST
+              : StatusCodes.INTERNAL_SERVER_ERROR;
           throw new ApiError(status, error.message, {
             cause: new AxiosErrorWrapper(error),
           });

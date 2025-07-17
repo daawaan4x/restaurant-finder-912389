@@ -4,6 +4,7 @@ import OpenAI from "openai";
 import { Translator } from "./translator";
 import { Foursquare } from "./foursquare";
 import { ApiError } from "./error/api-error";
+import { StatusCodes } from "http-status-codes";
 
 /**
  * Global Route Handler for the Application API
@@ -15,7 +16,7 @@ export const router = tsr.router(contract, {
   async search({ query: params }) {
     // authenticate by requiring `code=pioneerdevai`
     const { code, message } = params;
-    if (code !== "pioneerdevai") throw new ApiError(401);
+    if (code !== "pioneerdevai") throw new ApiError(StatusCodes.UNAUTHORIZED);
 
     // translate natural-lang message to structured query
     const openai = new OpenAI();

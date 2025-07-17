@@ -3,6 +3,7 @@ import translatorOutputJsonSchema from "./translator-schema.json";
 import { TranslatorOutputJson } from "./translator-schema";
 import { stripEmptyFields } from "../../utils/strip-empty-fields";
 import { ApiError } from "../error/api-error";
+import { StatusCodes } from "http-status-codes";
 
 /**
  * Translator for natural-language search to structured query
@@ -44,26 +45,34 @@ near (geocodable locality)`;
     });
 
     if (response.status != "completed")
-      throw new ApiError(500, "Failed to translate search input.", {
-        cause: response,
-      });
+      throw new ApiError(
+        StatusCodes.INTERNAL_SERVER_ERROR,
+        "Failed to translate search input.",
+        { cause: response },
+      );
 
     const output = response.output[0];
     if (output.type != "message")
-      throw new ApiError(500, "Unexpected translation ocurred.", {
-        cause: response,
-      });
+      throw new ApiError(
+        StatusCodes.INTERNAL_SERVER_ERROR,
+        "Unexpected translation ocurred.",
+        { cause: response },
+      );
 
     const content = output.content[0];
     if (content.type == "refusal")
-      throw new ApiError(400, "Refused to translate search input.", {
-        cause: response,
-      });
+      throw new ApiError(
+        StatusCodes.BAD_REQUEST,
+        "Refused to translate search input.",
+        { cause: response },
+      );
 
     if (!content.parsed)
-      throw new ApiError(500, "Failed to parse translation.", {
-        cause: response,
-      });
+      throw new ApiError(
+        StatusCodes.INTERNAL_SERVER_ERROR,
+        "Failed to parse translation.",
+        { cause: response },
+      );
 
     return stripEmptyFields(content.parsed);
   }
