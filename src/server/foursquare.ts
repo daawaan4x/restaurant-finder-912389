@@ -1,5 +1,7 @@
-import axios, { AxiosInstance } from "axios";
+import axios, { AxiosError, AxiosInstance } from "axios";
 import z from "zod";
+import { ApiError } from "./error/api-error";
+import { AxiosErrorWrapper } from "./error/axios-error-wrapper";
 
 /**
  * Base Schema for query params for {@link Foursquare.findPlaces}
@@ -21,6 +23,22 @@ export const findPlacesBaseSchema = z.object({
  * Input Validation Schema for {@link Foursquare.findPlaces}
  */
 export const findPlacesInputSchema = findPlacesBaseSchema.partial().optional();
+
+type FindPlacesOutput = {
+  // pass actual params used, useful for debugging
+  params: z.output<typeof findPlacesInputSchema>;
+
+  // type definition of original response from Foursquare API
+  results: unknown[];
+  context: {
+    geo_bounds: {
+      circle: {
+        center: { latitude: number; longitude: number };
+        radius: number;
+      };
+    };
+  };
+};
 
 /**
  * Typesafe Foursquare API Client
@@ -60,28 +78,24 @@ export class Foursquare {
   async findPlaces(input: z.input<typeof findPlacesInputSchema> = {}) {
     const params = findPlacesInputSchema.parse(input);
 
-    const response = await this.api.get("/places/search", {
-      headers: { "X-Places-Api-Version": "2025-06-17" },
-      params,
-    });
-
-    return {
-      params,
-      ...response.data,
-    } as {
-      // pass actual params used, useful for debugging
-      params: typeof params;
-
-      // type definition of original response from Foursquare API
-      results: unknown[];
-      context: {
-        geo_bounds: {
-          circle: {
-            center: { latitude: number; longitude: number };
-            radius: number;
-          };
-        };
-      };
-    };
+    return await this.api
+      .get("/places/search", {
+        // headers: { "X-Places-Api-Version": "2025-06-17" },
+        params,
+      })
+      .then((response) => {
+        return {
+          params,
+          ...response.data,
+        } as FindPlacesOutput;
+      })
+      .catch((error) => {
+        if (error instanceof AxiosError) {
+          const status = error.status == 400 ? 400 : 500;
+          throw new ApiError(status, error.message, {
+            cause: new AxiosErrorWrapper(error),
+          });
+        }
+      });
   }
 }
