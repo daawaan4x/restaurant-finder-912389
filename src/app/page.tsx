@@ -27,7 +27,7 @@ export default function Home() {
 
   const json = searchQuery.error ??
     searchQuery.data?.body?.data ?? {
-      message: "Try searching!",
+      message: "See JSON results here. Try searching!",
     };
 
   return (
@@ -75,7 +75,7 @@ export default function Home() {
           </div>
         )}
 
-        {!searchQuery.isFetching && searchQuery.isFetched && (
+        {!searchQuery.isFetching && (
           <div className="w-full mt-4">
             <ReactJson src={json} collapsed={3} />
           </div>
