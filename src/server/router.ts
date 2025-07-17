@@ -3,11 +3,12 @@ import { tsr } from "@ts-rest/serverless/next";
 import OpenAI from "openai";
 import { Translator } from "./translator";
 import { Foursquare } from "./foursquare";
+import { ApiError } from "./error/api-error";
 
 export const router = tsr.router(contract, {
   async search({ query: params }) {
     const { code, message } = params;
-    if (code !== "pioneerdevai") return { status: 401, body: undefined };
+    if (code !== "pioneerdevai") throw new ApiError(401);
 
     const openai = new OpenAI();
     const translator = new Translator({ openai });
