@@ -1,0 +1,87 @@
+{
+  "type": "json_schema",
+  "name": "translator_output",
+  "strict": true,
+  "schema": {
+    "type": "object",
+    "properties": {
+      "query": {
+        "anyOf": [{ "type": "string" }, { "type": "null" }],
+        "nullable": true,
+        "description": "A string to be matched against all content for this place, including but not limited to venue name, category, telephone number, taste, and tips."
+      },
+      "ll": {
+        "anyOf": [{ "type": "string" }, { "type": "null" }],
+        "nullable": true,
+        "description": "The latitude/longitude around which to retrieve place information. This must be specified as ll=lat,lon"
+      },
+      "radius": {
+        "anyOf": [
+          { "type": "number", "minimum": 0, "maximum": 10000 },
+          { "type": "null" }
+        ],
+        "description": "Sets a radius distance (in meters) used to define an area to bias search results. The maximum allowed radius is 100,000 meters. Radius can be used in combination with ll or ip biased geolocation only. By using radius, global search results will be omitted. If not provided, default radius applied is 22000 meters."
+      },
+      "min_price": {
+        "anyOf": [
+          { "type": "number", "minimum": 1, "maximum": 4 },
+          { "type": "null" }
+        ],
+        "description": "Restricts results to only those places within the specified price range. Valid values range between 1 (most affordable) to 4 (most expensive), inclusive."
+      },
+      "max_price": {
+        "anyOf": [
+          { "type": "number", "minimum": 1, "maximum": 4 },
+          { "type": "null" }
+        ],
+        "description": "Restricts results to only those places within the specified price range. Valid values range between 1 (most affordable) to 4 (most expensive), inclusive."
+      },
+      "open_at": {
+        "anyOf": [{ "type": "string" }, { "type": "null" }],
+        "nullable": true,
+        "description": "Support local day and local time requests through this parameter. To be specified as DOWTHHMM (e.g., 1T2130), where DOW is the day number 1-7 (Monday = 1, Sunday = 7) and time is in 24 hour format. Places that do not have opening hours will not be returned if this parameter is specified. Cannot be specified in conjunction with open_now."
+      },
+      "open_now": {
+        "anyOf": [{ "type": "boolean" }, { "type": "null" }],
+        "nullable": true,
+        "description": "Restricts results to only those places that are open now. Places that do not have opening hours will not be returned if this parameter is specified. Cannot be specified in conjunction with open_at."
+      },
+      "near": {
+        "anyOf": [{ "type": "string" }, { "type": "null" }],
+        "nullable": true,
+        "description": "A string naming a locality in the world (e.g., 'Chicago, IL'). If the value is not geocodable, returns an error. Global search results will be omitted."
+      },
+      "sort": {
+        "anyOf": [
+          {
+            "type": "string",
+            "enum": ["relevance", "rating", "distance", "popularity"]
+          },
+          { "type": "null" }
+        ],
+        "description": "Specifies the order in which results are listed."
+      },
+      "limit": {
+        "anyOf": [
+          { "type": "number", "minimum": 1, "maximum": 50 },
+          { "type": "null" }
+        ],
+        "description": "The number of results to return, up to 50. Defaults to 10."
+      }
+    },
+    "required": [
+      "query",
+      "ll",
+      "radius",
+      "min_price",
+      "max_price",
+      "open_at",
+      "open_now",
+      "near",
+      "sort",
+      "limit"
+    ],
+    "additionalProperties": false,
+    "$schema": "http://json-schema.org/draft-07/schema#"
+  }
+}
