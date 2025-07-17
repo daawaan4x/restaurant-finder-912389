@@ -15,7 +15,7 @@ export class ApiError extends Error {
   constructor(
     public status: number,
     message?: string,
-    options?: ErrorOptions
+    options?: ErrorOptions,
   ) {
     super(message, options);
   }

@@ -21,6 +21,6 @@ export function errorHandler(error: unknown, request: TsRestRequest) {
 
   return TsRestResponse.fromJson(
     { message: "An unexpected error ocurred." },
-    { status: 500 }
+    { status: 500 },
   );
 }
