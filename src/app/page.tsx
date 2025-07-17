@@ -1,13 +1,30 @@
 "use client";
 
+import { tsr } from "@/client/ts-rest";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Skeleton } from "@/components/ui/skeleton";
 import { Textarea } from "@/components/ui/textarea";
-import { useState } from "react";
+import ReactJson from "@microlink/react-json-view";
+import { useEffect, useState } from "react";
 
 export default function Home() {
   const [message, setMessage] = useState("");
   const [code, setCode] = useState("");
+
+  const searchQuery = tsr.search.useQuery({
+    queryKey: ["search"],
+    queryData: {
+      query: { code, message },
+    },
+    enabled: false,
+    retry: false,
+  });
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  useEffect(() => void searchQuery.refetch(), []);
+
+  const json = searchQuery.error ?? searchQuery.data?.body?.data ?? {};
 
   return (
     <div className="flex flex-col items-center font-sans">
@@ -40,9 +57,23 @@ export default function Home() {
               value={code}
               onChange={(value) => setCode(value.target.value)}
             />
-            <Button>Search</Button>
+            <Button onClick={() => searchQuery.refetch()}>Search</Button>
           </div>
         </div>
+
+        {searchQuery.isFetching && (
+          <div className="flex flex-col mt-4 space-y-2 items-center">
+            <Skeleton className="h-4 w-72" />
+            <Skeleton className="h-4 w-60" />
+            <Skeleton className="h-4 w-48" />
+          </div>
+        )}
+
+        {!searchQuery.isFetching && searchQuery.isFetched && (
+          <div className="w-full mt-4">
+            <ReactJson src={json} collapsed={3} />
+          </div>
+        )}
       </main>
     </div>
   );
