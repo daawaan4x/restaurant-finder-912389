@@ -6,7 +6,7 @@ import { createNextHandler } from "@ts-rest/serverless/next";
 /**
  * Catch-all ts-rest route handler for decoupling API paths from NextJS-specific project structure
  */
-export const handler = createNextHandler(contract, router, {
+const handler = createNextHandler(contract, router, {
   handlerType: "app-router",
   jsonQuery: true,
   errorHandler,
