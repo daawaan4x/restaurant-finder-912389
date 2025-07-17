@@ -1,3 +1,6 @@
+/**
+ * General-purpose error class for throwing errors with an HTTP status code
+ */
 export class ApiError extends Error {
   constructor(status: number);
   constructor(status: number, message?: string);

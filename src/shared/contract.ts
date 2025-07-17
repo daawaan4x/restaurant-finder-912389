@@ -3,6 +3,9 @@ import z from "zod";
 
 const c = initContract();
 
+/**
+ * Root API Contract Definition - used by both API Route Handlers and API Client
+ */
 export const contract = c.router({
   search: {
     method: "GET",

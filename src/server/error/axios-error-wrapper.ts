@@ -1,5 +1,8 @@
 import { AxiosError } from "axios";
 
+/**
+ * A {@link AxiosError} wrapper containing only the key details.
+ */
 export class AxiosErrorWrapper extends Error {
   config: AxiosError["config"];
   request: AxiosError["request"];

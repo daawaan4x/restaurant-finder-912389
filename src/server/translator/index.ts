@@ -4,9 +4,17 @@ import { TranslatorOutputJson } from "./translator-schema";
 import { stripEmptyFields } from "../../utils/strip-empty-fields";
 import { ApiError } from "../error/api-error";
 
+/**
+ * Translator for natural-language search to structured query
+ */
 export class Translator {
   constructor(private opts: { openai: OpenAI }) {}
 
+  /**
+   * Translates natural-language search input to a structured query following {@link translatorOutputJsonSchema}
+   *
+   * @param search natural-language search text
+   */
   async toQuery(search: string) {
     const { openai } = this.opts;
 

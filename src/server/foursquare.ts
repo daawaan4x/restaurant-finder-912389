@@ -68,8 +68,6 @@ export class Foursquare {
   }
 
   /**
-   * TODO: Add Error Handling for 400, 401 responses
-   *
    * Find places using https://places-api.foursquare.com/places/search
    * @param input - Query parameters for the endpoint
    *
@@ -91,11 +89,15 @@ export class Foursquare {
       })
       .catch((error) => {
         if (error instanceof AxiosError) {
+          // if downstream response is 400, return 400
+          // default to 500 for any other errors
           const status = error.status == 400 ? 400 : 500;
           throw new ApiError(status, error.message, {
             cause: new AxiosErrorWrapper(error),
           });
         }
+
+        throw error;
       });
   }
 }
