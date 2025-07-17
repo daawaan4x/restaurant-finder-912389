@@ -5,8 +5,12 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Textarea } from "@/components/ui/textarea";
-import ReactJson from "@microlink/react-json-view";
 import { useEffect, useState } from "react";
+import dynamic from "next/dynamic";
+
+const ReactJson = dynamic(() => import("@microlink/react-json-view"), {
+  ssr: false,
+});
 
 export default function Home() {
   const [message, setMessage] = useState("");
@@ -27,11 +31,13 @@ export default function Home() {
   const json = searchQuery.error ?? searchQuery.data?.body?.data ?? {};
 
   return (
-    <div className="flex flex-col items-center font-sans">
-      <div className="flex flex-col mt-44 mb-12 items-center">
+    <div className="flex flex-col items-center font-sans pt-44 pb-28">
+      <header className="flex flex-col mb-12 items-center">
         <h1 className="text-4xl font-bold">🍽️ Restaurant Finder</h1>
         <p className="flex flex-row space-x-2 mt-4 opacity-60 text-sm items-center">
           <span>by Theone Genesis Eclarin</span>
+
+          {/* Github Badge */}
           <a href="https://github.com/daawaan4x">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
@@ -41,7 +47,7 @@ export default function Home() {
             />
           </a>
         </p>
-      </div>
+      </header>
 
       <main className="flex flex-col w-[80%] max-w-xl items-center space-y-4">
         <div className="grid w-full gap-2">
