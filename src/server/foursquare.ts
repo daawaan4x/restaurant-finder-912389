@@ -2,24 +2,25 @@ import axios, { AxiosInstance } from "axios";
 import z from "zod";
 
 /**
+ * Base Schema for query params for {@link Foursquare.findPlaces}
+ */
+export const findPlacesBaseSchema = z.object({
+  query: z.string(),
+  ll: z.string(),
+  radius: z.number().min(0).max(10000),
+  min_price: z.number().min(1).max(4),
+  max_price: z.number().min(1).max(4),
+  open_at: z.string(),
+  open_now: z.boolean(),
+  near: z.string(),
+  sort: z.enum(["relevance", "rating", "distance", "popularity"]),
+  limit: z.number().min(1).max(50),
+});
+
+/**
  * Input Validation Schema for {@link Foursquare.findPlaces}
  */
-export const findPlacesInputSchema = z
-  .object({
-    query: z.string(),
-    ll: z
-      .tuple([z.number().min(-90).max(90), z.number().min(-180).max(180)])
-      .transform((arg) => arg.join(",")),
-    radius: z.number().min(0).max(10000),
-    min_price: z.number().min(1).max(4),
-    max_price: z.number().min(1).max(4),
-    open_at: z.string(),
-    open_now: z.boolean(),
-    near: z.string(),
-    limit: z.number().min(1).max(50),
-  })
-  .partial()
-  .optional();
+export const findPlacesInputSchema = findPlacesBaseSchema.partial().optional();
 
 /**
  * Typesafe Foursquare API Client
@@ -48,6 +49,7 @@ export class Foursquare {
    */
   async findPlaces(input: z.input<typeof findPlacesInputSchema> = {}) {
     const params = findPlacesInputSchema.parse(input);
+
     const response = await this.api.get("/places/search", {
       headers: { "X-Places-Api-Version": "2025-06-17" },
       params,
