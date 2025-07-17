@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Textarea } from "@/components/ui/textarea";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import dynamic from "next/dynamic";
 
 const ReactJson = dynamic(() => import("@microlink/react-json-view"), {
@@ -25,10 +25,10 @@ export default function Home() {
     retry: false,
   });
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  useEffect(() => void searchQuery.refetch(), []);
-
-  const json = searchQuery.error ?? searchQuery.data?.body?.data ?? {};
+  const json = searchQuery.error ??
+    searchQuery.data?.body?.data ?? {
+      message: "Try searching!",
+    };
 
   return (
     <div className="flex flex-col items-center font-sans pt-44 pb-28">
