@@ -8,6 +8,12 @@ importers:
 
   .:
     dependencies:
+      '@ts-rest/core':
+        specifier: ^3.52.1
+        version: 3.52.1(@types/node@20.19.8)(zod@3.25.76)
+      '@ts-rest/serverless':
+        specifier: ^3.52.1
+        version: 3.52.1(@ts-rest/core@3.52.1(@types/node@20.19.8)(zod@3.25.76))(next@15.4.1(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(zod@3.25.76)
       axios:
         specifier: ^1.10.0
         version: 1.10.0
@@ -602,6 +608,35 @@ packages:
 
   '@tailwindcss/postcss@4.1.11':
     resolution: {integrity: sha512-q/EAIIpF6WpLhKEuQSEVMZNMIY8KhWoAemZ9eylNAih9jxMGAYPPWBn3I9QL/2jZ+e7OEz/tZkX5HwbBR4HohA==}
+
+  '@ts-rest/core@3.52.1':
+    resolution: {integrity: sha512-tAjz7Kxq/grJodcTA1Anop4AVRDlD40fkksEV5Mmal88VoZeRKAG8oMHsDwdwPZz+B/zgnz0q2sF+cm5M7Bc7g==}
+    peerDependencies:
+      '@types/node': ^18.18.7 || >=20.8.4
+      zod: ^3.22.3
+    peerDependenciesMeta:
+      '@types/node':
+        optional: true
+      zod:
+        optional: true
+
+  '@ts-rest/serverless@3.52.1':
+    resolution: {integrity: sha512-9lz6SVC/zOjR7Q70Uige1i4fgSLS5cPpei/ocBgdwhc/TJhKWTMQog2IQX3pT2nIA4B4QvZ54YyrBkSiwbrGPw==}
+    peerDependencies:
+      '@azure/functions': ^4.0.0
+      '@ts-rest/core': ~3.52.0
+      '@types/aws-lambda': ^8.10.115
+      next: ^12.0.0 || ^13.0.0 || ^14.0.0
+      zod: ^3.22.3
+    peerDependenciesMeta:
+      '@azure/functions':
+        optional: true
+      '@types/aws-lambda':
+        optional: true
+      next:
+        optional: true
+      zod:
+        optional: true
 
   '@tybys/wasm-util@0.10.0':
     resolution: {integrity: sha512-VyyPYFlOMNylG45GoAe0xDoLwWuowvf92F9kySqzYh8vmYm7D2u4iUJKa1tOUpS70Ku13ASrOkS4ScXFsTaCNQ==}
@@ -1437,6 +1472,9 @@ packages:
   iterator.prototype@1.1.5:
     resolution: {integrity: sha512-H0dkQoCa3b2VEeKQBOxFph+JAbcrQdE7KC0UkqwpLmv2EC4P41QXP+rqo9wYodACiG5/WM5s9oDApTU8utwj9g==}
     engines: {node: '>= 0.4'}
+
+  itty-router@5.0.18:
+    resolution: {integrity: sha512-mK3ReOt4ARAGy0V0J7uHmArG2USN2x0zprZ+u+YgmeRjXTDbaowDy3kPcsmQY6tH+uHhDgpWit9Vqmv/4rTXwA==}
 
   jiti@2.4.2:
     resolution: {integrity: sha512-rg9zJN+G4n2nfJl5MW3BMygZX56zKPNVEYYqq7adpmMh4Jn2QNEwhvQlFy6jPVdcod7txZtKHWnyZiA3a0zP7A==}
@@ -2435,6 +2473,19 @@ snapshots:
       '@tailwindcss/oxide': 4.1.11
       postcss: 8.5.6
       tailwindcss: 4.1.11
+
+  '@ts-rest/core@3.52.1(@types/node@20.19.8)(zod@3.25.76)':
+    optionalDependencies:
+      '@types/node': 20.19.8
+      zod: 3.25.76
+
+  '@ts-rest/serverless@3.52.1(@ts-rest/core@3.52.1(@types/node@20.19.8)(zod@3.25.76))(next@15.4.1(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(zod@3.25.76)':
+    dependencies:
+      '@ts-rest/core': 3.52.1(@types/node@20.19.8)(zod@3.25.76)
+      itty-router: 5.0.18
+    optionalDependencies:
+      next: 15.4.1(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+      zod: 3.25.76
 
   '@tybys/wasm-util@0.10.0':
     dependencies:
@@ -3484,6 +3535,8 @@ snapshots:
       get-proto: 1.0.1
       has-symbols: 1.1.0
       set-function-name: 2.0.2
+
+  itty-router@5.0.18: {}
 
   jiti@2.4.2: {}
 

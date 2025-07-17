@@ -30,7 +30,17 @@ export const findPlacesInputSchema = findPlacesBaseSchema.partial().optional();
 export class Foursquare {
   private api: AxiosInstance;
 
-  constructor(opts: { apiKey: string }) {
+  constructor(
+    opts: {
+      /**
+       * Defaults to `process.env.FOURSQUARE_API_KEY`
+       */
+      apiKey?: string;
+    } = {}
+  ) {
+    opts.apiKey ??= process.env.FOURSQUARE_API_KEY;
+    if (!opts.apiKey) throw new Error("Foursquare API Key required.");
+
     this.api = axios.create({
       baseURL: "https://places-api.foursquare.com/",
       headers: {
