@@ -54,7 +54,7 @@ export class Foursquare {
        * Defaults to `process.env.FOURSQUARE_API_KEY`
        */
       apiKey?: string;
-    } = {}
+    } = {},
   ) {
     opts.apiKey ??= process.env.FOURSQUARE_API_KEY;
     if (!opts.apiKey) throw new Error("Foursquare API Key required.");
