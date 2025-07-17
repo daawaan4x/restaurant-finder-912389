@@ -78,7 +78,7 @@ export class Foursquare {
 
     return await this.api
       .get("/places/search", {
-        // headers: { "X-Places-Api-Version": "2025-06-17" },
+        headers: { "X-Places-Api-Version": "2025-06-17" },
         params,
       })
       .then((response) => {
