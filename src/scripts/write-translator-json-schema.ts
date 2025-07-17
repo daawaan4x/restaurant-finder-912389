@@ -13,7 +13,7 @@ async function main() {
   const json = zodTextFormat(translatorOutputSchema, "translator_output");
   await writeFile(
     "./src/server/translator/translator-schema.json",
-    JSON.stringify(json)
+    JSON.stringify(json),
   );
   console.log(`✅ Updated ${new Date()}`);
   process.exit(0);

@@ -4,19 +4,35 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "next dev --turbopack",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "format": "prettier --write .",
+    "typecheck": "tsc --noEmit"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "@types/node": "^24.0.14",
+    "@eslint/eslintrc": "^3",
+    "@tailwindcss/postcss": "^4",
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "eslint": "^9",
+    "eslint-config-next": "15.4.1",
+    "tailwindcss": "^4",
     "tsx": "^4.20.3",
-    "typescript": "^5.8.3"
+    "typescript": "^5"
   },
   "dependencies": {
     "axios": "^1.10.0",
+    "next": "15.4.1",
     "openai": "^5.10.1",
+    "prettier": "^3.6.2",
+    "react": "19.1.0",
+    "react-dom": "19.1.0",
     "zod": "^3.23.8"
   }
 }
