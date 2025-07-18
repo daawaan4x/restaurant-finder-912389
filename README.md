@@ -14,6 +14,13 @@ After cloning the repository, run the following commands to initialize the repo.
 pnpm install		# install project dependencies
 ```
 
+Create a `.env` file containing the following variables:
+
+```env
+OPENAI_API_KEY=<openai_api_key>
+FOURSQUARE_API_KEY=<foursquare_api_key>
+```
+
 The following is a list of the primary scripts for the project.
 
 ```bash
