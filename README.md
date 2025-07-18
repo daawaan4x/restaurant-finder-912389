@@ -1,7 +1,7 @@
 # Restaurant Finder
 
 <div align="center">
-	<img width="560" style="border: 1px solid black" src="static/image.png"/>
+	<img width="560" src="static/image.png"/>
 </div>
 
 Find restaurants and search using natural language
@@ -14,12 +14,14 @@ After cloning the repository, run the following commands to initialize the repo.
 pnpm install		# install project dependencies
 ```
 
-Create a `.env` file containing the following variables:
+**IMPORTANT:** Create a `.env` file containing the following variables:
 
 ```env
 OPENAI_API_KEY=<openai_api_key>
 FOURSQUARE_API_KEY=<foursquare_api_key>
 ```
+
+Run `pnpm run dev` then open [http://localhost:3000](http://localhost:3000) to view the website.
 
 The following is a list of the primary scripts for the project.
 
@@ -32,17 +34,47 @@ pnpm run typecheck	# typecheck codebase with Typescript
 pnpm run format		# format codebase with Prettier
 ```
 
-Open [http://localhost:3000](http://localhost:3000) after running `pnpm run dev` to view the website.
+To run any custom typescript script, use the following command:
+
+```
+pnpm exec tsx ./path/to/script.ts
+```
 
 ## API
 
 This project uses the following tech for the API.
 
 - [ts-rest](https://ts-rest.com/): End-to-end type-safe REST-API
-- [Zod](https://zod.dev/): Declarative data validation with user-defined schemas
+- [Zod](https://zod.dev/): Declarative framework for data validation/parsing schemas
 
 ```
 GET /api/execute?message=<string>&code=<string>
+```
+
+## Project Structure
+
+The project is a full-stack application using NextJS. The following is a simplified description of the current folder structure (formatted with [tree.nathanfriend.com](https://tree.nathanfriend.com)).
+
+```
+src/
+├── app/
+│   ├── [...ts-rest]/
+│   │   └── route.ts    # catch-all ts-rest route handler
+│   ├── layout.tsx      # root layout
+│   └── page.tsx        # '/' page
+├── client/
+│   └── ts-rest.ts      # ts-rest frontend client
+├── components/ui/...   # shadcn-ui components
+├── lib/...             # shadcn-ui helpers
+├── scripts/...         # custom standalone scripts
+├── server/
+│   ├── error/...       # error classes and handlers
+│   ├── translator/...  # openai client for converting natural text to json
+│   ├── foursquare.ts   # typesafe foursquare api wrapper
+│   └── router.ts       # API backend functions w/ ts-rest
+├── shared/
+│   └── contract.ts     # API definition w/ ts-rest
+└── utils/...           # custom helpers
 ```
 
 ## Tooling
@@ -83,6 +115,18 @@ This project uses the following tools to enforce consistent coding conventions, 
 
   I currently have not learned of best practices for setting up CI tests for an LLM apps. I would love to learn how this is done properly in real-life projects.
 
+## Challenges
+
+- Incomplete Zod Integration for OpenAI's Structured Output
+
+  OpenAI's [`zodTextFormat()`](https://platform.openai.com/docs/guides/structured-outputs) function is used to translate a Zod Schema into a JSON Schema that the GPT model can use to output a JSON with a specific structure. However, it sets `nullable: true` to some fields which is not a supported feature mentioned in the documentation in contrast to using the prescribed `"anyOf": [{ "type": "null" }, ...]`.
+
+  Based on observation, the Structured Output feature appears to ignore the `"nullable": true` and only considers setting `null` to the field if it has a union type with `null` e.g. `"anyOf": [{ "type": "null" }, { "type": "string" }]`.
+
+  As a workaround, I created a script [`write-translator-json-schema.ts`](./src/scripts/write-translator-json-schema.ts) that writes the output of the `zodTextFormat()` for [`translator-schema.ts`](./src/server/translator/translator-schema.ts) into a seperate JSON file [`translator-schema.json`](./src/server/translator/translator-schema.json). This can be manually edited to apply the necessary type changes and then later imported as the JSON schema passed to the GPT model as seen in [`translator/index.ts`](./src/server/translator/index.ts).
+
+  > NOTE: The JSON schema generated is treated as part of the prompt by GPT, including the fields' individual descriptions, min-max ranges, etc.
+
 ## Assumptions & Limitations
 
 - The [provided Foursquare Places API endpoint](https://docs.foursquare.com/developer/reference/place-search) is apparently depracated and not supported anymore. I decided to implement the app around the corresponding [new API endpoint](https://docs.foursquare.com/fsq-developers-places/reference/place-search) instead.
@@ -101,4 +145,4 @@ This project uses the following tools to enforce consistent coding conventions, 
 
   This scenario made field extraction tricky e.g. determining which fields are the key fields, since this meant the app might accidentally return `undefined` fields. Fields such as `rating` are also locked behind the Premium API.
 
-  For this, I decided to not transform the returned JSON results anymore, though I believe the language in the guideline _leans towards_ transforming the returned JSON results.
+  For this, I decided to not transform the returned JSON results anymore. Though I believe the language in the guideline _leans towards_ transforming the returned JSON results.
