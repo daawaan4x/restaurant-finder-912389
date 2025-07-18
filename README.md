@@ -45,8 +45,6 @@ This project uses the following tech for the API.
 GET /api/execute?message=<string>&code=<string>
 ```
 
-Use `code=pioneerdevai` to pass authentication.
-
 ## Tooling
 
 This project uses the following tools to enforce consistent coding conventions, formatting, and automated workflows:
